@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOR RITA FROM MAXIM</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Caveat:wght@700&display=swap');
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background: #000;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        #canvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 90%;
+        }
+
+        /* Кнопка Старт */
+        #init-btn {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 20px 50px;
+            font-size: 1rem;
+            letter-spacing: 10px;
+            cursor: pointer;
+            transition: 0.5s;
+            text-transform: uppercase;
+        }
+        #init-btn:hover {
+            background: white;
+            color: black;
+            box-shadow: 0 0 30px white;
+        }
+
+        /* Эпичный текст */
+        #epic-zone {
+            display: none;
+        }
+
+        .glitch-text {
+            font-size: clamp(3rem, 10vw, 6rem);
+            line-height: 1;
+            background: linear-gradient(to bottom, #fff 30%, #ff0055);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(255, 0, 85, 0.8));
+            margin-bottom: 20px;
+        }
+
+        /* Милая зона */
+        #cute-zone {
+            display: none;
+            opacity: 0;
+            transition: 3s ease-in-out;
+        }
+
+        .heart-icon {
+            font-size: 5rem;
+            color: #ff0055;
+            animation: beat 0.8s infinite alternate;
+            filter: drop-shadow(0 0 20px #ff0055);
+        }
+
+        @keyframes beat {
+            to { transform: scale(1.2); }
+        }
+
+        .letter {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            max-width: 600px;
+            margin: 20px auto;
+            line-height: 1.2;
+            color: #ffcccc;
+        }
+
+        .floating-text {
+            position: absolute;
+            font-family: 'Caveat', cursive;
+            color: rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div class="container">
+    <button id="init-btn">Запустить протокол</button>
+
+    <div id="epic-zone">
+        <div id="timer" style="font-size: 5rem; color: #ff0055;"></div>
+        <div id="main-phrase" class="glitch-text" style="display:none;">МАКСИМ ЛЮБИТ РИТУ</div>
+    </div>
+
+    <div id="cute-zone">
+        <div class="heart-icon">❤️</div>
+        <div class="letter">
+            Рита, ты — самое лучшее, что случилось со мной. <br>
+            Этот мир становится ярче, когда ты улыбаешься. <br>
+            Я всегда буду рядом.
+        </div>
+        <p style="font-size: 0.8rem; letter-spacing: 3px; opacity: 0.5;">[ ТВОЯ ПЕРСОНАЛЬНАЯ ВСЕЛЕННАЯ ]</p>
+    </div>
+</div>
+
+<audio id="music">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    const btn = document.getElementById('init-btn');
+    const epicZone = document.getElementById('epic-zone');
+    const cuteZone = document.getElementById('cute-zone');
+    const timerDiv = document.getElementById('timer');
+    const mainPhrase = document.getElementById('main-phrase');
+    const music = document.getElementById('music');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    let particles = [];
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Particle {
+        constructor(x, y, color) {
+            this.x = x || Math.random() * canvas.width;
+            this.y = y || Math.random() * canvas.height;
+            this.size = Math.random() * 3 + 1;
+            this.speedX = Math.random() * 4 - 2;
+            this.speedY = Math.random() * 4 - 2;
+            this.color = color || 'white';
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.size > 0.1) this.size -= 0.01;
+        }
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function animate() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p, i) => {
+            p.update();
+            p.draw();
+            if (p.size <= 0.1) particles.splice(i, 1);
+        });
+        if (particles.length < 100) {
+            particles.push(new Particle());
+        }
+        requestAnimationFrame(animate);
+    }
+
+    btn.addEventListener('click', () => {
+        btn.style.display = 'none';
+        epicZone.style.display = 'block';
+        music.play();
+
+        let count = 3;
+        timerDiv.innerText = count;
+        
+        let countdown = setInterval(() => {
+            count--;
+            timerDiv.innerText = count;
+            // Взрыв частиц на каждый отсчет
+            for(let i=0; i<50; i++) particles.push(new Particle(canvas.width/2, canvas.height/2, '#ff0055'));
+
+            if (count <= 0) {
+                clearInterval(countdown);
+                timerDiv.style.display = 'none';
+                showEpic();
+            }
+        }, 1000);
+    });
+
+    function showEpic() {
+        mainPhrase.style.display = 'block';
+        // Эпичный взрыв белых частиц
+        for(let i=0; i<300; i++) particles.push(new Particle(canvas.width/2, canvas.height/2, 'white'));
+
+        setTimeout(() => {
+            mainPhrase.style.transition = '2s';
+            mainPhrase.style.opacity = '0';
+            mainPhrase.style.transform = 'scale(2)';
+            
+            setTimeout(showCute, 2000);
+        }, 4000); // Сколько секунд будет висеть эпичная фраза
+    }
+
+    function showCute() {
+        epicZone.style.display = 'none';
+        cuteZone.style.display = 'block';
+        setTimeout(() => { cuteZone.style.opacity = 1; }, 100);
+
+        // Меняем частицы на сердечки
+        setInterval(() => {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            createFloatingText("люблю", x, y);
+        }, 1000);
+    }
+
+    function createFloatingText(text, x, y) {
+        const span = document.createElement('span');
+        span.innerText = text;
+        span.className = 'floating-text';
+        span.style.left = x + 'px';
+        span.style.top = y + 'px';
+        document.body.appendChild(span);
+        
+        let pos = y;
+        let opacity = 1;
+        const interval = setInterval(() => {
+            pos -= 1;
+            opacity -= 0.01;
+            span.style.top = pos + 'px';
+            span.style.opacity = opacity;
+            if (opacity <= 0) {
+                clearInterval(interval);
+                span.remove();
+            }
+        }, 50);
+    }
+
+    animate();
+</script>
+
+</body>
+</html>

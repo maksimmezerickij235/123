@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Master - Играй в шахматы онлайн</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Главное меню -->
+        <div id="main-menu" class="menu-screen active">
+            <div class="menu-content">
+                <h1 class="game-title">♔ Chess Master ♚</h1>
+                <p class="game-subtitle">Классические шахматы</p>
+                
+                <div class="menu-buttons">
+                    <button class="btn btn-primary" onclick="showScreen('game-setup')">
+                        🎮 Играть
+                    </button>
+                    <button class="btn btn-secondary" onclick="showLeaderboard()">
+                        🏆 Таблица лидеров
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Настройка игры -->
+        <div id="game-setup" class="menu-screen">
+            <div class="menu-content">
+                <h2 class="screen-title">Выберите режим игры</h2>
+                
+                <div class="mode-buttons">
+                    <button class="btn btn-primary" onclick="startGame('pvp')">
+                        👥 Игрок vs Игрок
+                    </button>
+                    <button class="btn btn-secondary" onclick="showScreen('bot-difficulty')">
+                        🤖 Игрок vs Бот
+                    </button>
+                    <button class="btn btn-back" onclick="showScreen('main-menu')">
+                        ← Назад
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Выбор сложности бота -->
+        <div id="bot-difficulty" class="menu-screen">
+            <div class="menu-content">
+                <h2 class="screen-title">Выберите сложность</h2>
+                
+                <div class="difficulty-buttons">
+                    <button class="btn btn-easy" onclick="startGame('bot', 'easy')">
+                        🟢 Лёгкий
+                    </button>
+                    <button class="btn btn-medium" onclick="startGame('bot', 'medium')">
+                        🟡 Средний
+                    </button>
+                    <button class="btn btn-hard" onclick="startGame('bot', 'hard')">
+                        🔴 Сложный
+                    </button>
+                    <button class="btn btn-back" onclick="showScreen('game-setup')">
+                        ← Назад
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Игровой экран -->
+        <div id="game-screen" class="game-screen">
+            <div class="game-header">
+                <button class="btn btn-small" onclick="endGame()">
+                    ← Меню
+                </button>
+                <div class="game-info">
+                    <div class="player-info" id="player-white">
+                        <span class="player-icon">♔</span>
+                        <span class="player-name">Белые</span>
+                    </div>
+                    <div class="vs-indicator">VS</div>
+                    <div class="player-info" id="player-black">
+                        <span class="player-name">Чёрные</span>
+                        <span class="player-icon">♚</span>
+                    </div>
+                </div>
+                <button class="btn btn-small" onclick="resetGame()">
+                    🔄 Новая игра
+                </button>
+            </div>
+
+            <div class="game-container">
+                <div class="board-container">
+                    <div class="board-coordinates-left">
+                        <span>8</span><span>7</span><span>6</span><span>5</span>
+                        <span>4</span><span>3</span><span>2</span><span>1</span>
+                    </div>
+                    <div class="chess-board" id="chess-board"></div>
+                    <div class="board-coordinates-bottom">
+                        <span>a</span><span>b</span><span>c</span><span>d</span>
+                        <span>e</span><span>f</span><span>g</span><span>h</span>
+                    </div>
+                </div>
+
+                <div class="game-panel">
+                    <div class="status-panel">
+                        <div class="turn-indicator" id="turn-indicator">
+                            <span class="turn-icon">♔</span>
+                            <span class="turn-text">Ход белых</span>
+                        </div>
+                        <div class="game-status" id="game-status"></div>
+                    </div>
+
+                    <div class="captured-pieces">
+                        <div class="captured-section">
+                            <span class="captured-title">Съедено белыми:</span>
+                            <div class="captured-list" id="captured-white"></div>
+                        </div>
+                        <div class="captured-section">
+                            <span class="captured-title">Съедено чёрными:</span>
+                            <div class="captured-list" id="captured-black"></div>
+                        </div>
+                    </div>
+
+                    <div class="move-history" id="move-history">
+                        <h3>История ходов</h3>
+                        <div class="moves-list" id="moves-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Таблица лидеров -->
+        <div id="leaderboard-screen" class="menu-screen">
+            <div class="menu-content leaderboard-content">
+                <h2 class="screen-title">🏆 Таблица лидеров</h2>
+                
+                <div class="leaderboard-table">
+                    <div class="leaderboard-header">
+                        <span>#</span>
+                        <span>Игрок</span>
+                        <span>Победы</span>
+                        <span>Поражения</span>
+                        <span>Рейтинг</span>
+                    </div>
+                    <div id="leaderboard-body"></div>
+                </div>
+
+                <div class="player-stats" id="player-stats">
+                    <h3>Ваша статистика</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">Победы:</span>
+                            <span class="stat-value" id="stat-wins">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Поражения:</span>
+                            <span class="stat-value" id="stat-losses">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Рейтинг:</span>
+                            <span class="stat-value" id="stat-rating">1000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="leaderboard-buttons">
+                    <button class="btn btn-back" onclick="showScreen('main-menu')">
+                        ← Назад
+                    </button>
+                    <button class="btn btn-danger" onclick="resetStats()">
+                        🗑️ Сбросить статистику
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно конца игры -->
+        <div id="game-over-modal" class="modal">
+            <div class="modal-content">
+                <h2 id="game-over-title">Игра окончена</h2>
+                <p id="game-over-message"></p>
+                <div class="modal-buttons">
+                    <button class="btn btn-primary" onclick="resetGame()">
+                        🔄 Новая игра
+                    </button>
+                    <button class="btn btn-secondary" onclick="endGame()">
+                        📋 В меню
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

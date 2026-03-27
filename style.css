@@ -1,0 +1,303 @@
+:root {
+    --bg-color: #fce4ec; /* base pink */
+    --gradient-1: #ffb6c1;
+    --gradient-2: #ffc0cb;
+    --gradient-3: #f8bbd0;
+    --text-primary: #880e4f;
+    --text-secondary: #ad1457;
+    --glass-bg: rgba(255, 255, 255, 0.25);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-shadow: 0 8px 32px 0 rgba(233, 30, 99, 0.15);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #fce4ec, #f8bbd0, #ffc0cb, #fce4ec);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: var(--text-primary);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+h1, h2, h3, .highlight {
+    font-family: 'Caveat', cursive;
+}
+
+/* Background Canvas */
+#particles-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Sections */
+section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Glassmorphism */
+.glass-panel, .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: var(--glass-shadow);
+    text-align: center;
+    max-width: 800px;
+    width: 100%;
+}
+
+.glass-card {
+    padding: 2.5rem;
+    max-width: 600px;
+}
+
+.hero h1 {
+    font-size: 4.5rem;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 10px rgba(255,255,255,0.5);
+}
+
+.hero .highlight {
+    color: #d81b60;
+    font-size: 5.5rem;
+    display: block;
+}
+
+.hero .subtitle {
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin-bottom: 3rem;
+}
+
+/* Scroll Indicator */
+.scroll-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.8;
+}
+
+.scroll-indicator span {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.arrow {
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid var(--text-primary);
+    border-bottom: 2px solid var(--text-primary);
+    transform: rotate(45deg);
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0) rotate(45deg); }
+    40% { transform: translateY(-10px) rotate(45deg); }
+    60% { transform: translateY(-5px) rotate(45deg); }
+}
+
+/* Wishes */
+.wishes h2 {
+    font-size: 3.5rem;
+    color: #c2185b;
+    margin-bottom: 1.5rem;
+}
+
+.wishes p {
+    font-size: 1.25rem;
+    line-height: 1.8;
+}
+
+/* Emotional Cards */
+.cards-container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.glass-card.small {
+    flex: 1 1 300px;
+    max-width: 350px;
+    padding: 2rem;
+    transform: perspective(1000px) rotateX(0) rotateY(0) scale(1);
+}
+
+.glass-card.small .icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.glass-card.small h3 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: #c2185b;
+}
+
+/* Interactive */
+.glow-btn {
+    background: linear-gradient(45deg, #ff4081, #f50057);
+    color: white;
+    border: none;
+    padding: 1.2rem 3rem;
+    font-size: 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(245, 0, 87, 0.4);
+    transition: all 0.3s ease;
+    outline: none;
+    position: relative;
+    z-index: 10;
+}
+
+.glow-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(245, 0, 87, 0.6);
+}
+
+.glow-btn.pulse {
+    animation: pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(245, 0, 87, 0.4); }
+    70% { box-shadow: 0 0 0 20px rgba(245, 0, 87, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(245, 0, 87, 0); }
+}
+
+.hidden-message {
+    margin-top: 3rem;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    visibility: hidden;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+}
+
+.hidden-message.show {
+    opacity: 1;
+    transform: scale(1);
+    visibility: visible;
+}
+
+.hidden-message h2 {
+    font-size: 3.5rem;
+    color: #c2185b;
+    margin-bottom: 1rem;
+}
+
+.hidden-message p {
+    font-size: 1.5rem;
+}
+
+/* Final */
+.final h1 {
+    font-size: 6rem;
+    color: white;
+    text-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 40px #ff4081, 0 0 60px #f50057;
+    animation: floatingFinal 3s ease-in-out infinite;
+    text-align: center;
+}
+
+@keyframes floatingFinal {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+/* Animations Reveal */
+.fade-up, .slide-up, .scale-up {
+    opacity: 0;
+    will-change: opacity, transform;
+}
+
+.fade-up {
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.slide-up {
+    transform: translateY(50px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scale-up {
+    transform: scale(0.8);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.slide-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.scale-up.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.delay-1 { transition-delay: 0.2s; }
+.delay-2 { transition-delay: 0.4s; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 3.5rem; }
+    .hero .highlight { font-size: 4rem; }
+    .hero .subtitle { font-size: 1.2rem; }
+    .glass-panel, .glass-card { padding: 2rem; }
+    .final h1 { font-size: 4rem; }
+    .wishes h2 { font-size: 3rem; }
+    .cards-container { gap: 1rem; }
+    .hidden-message h2 { font-size: 3rem; }
+    .hidden-message p { font-size: 1.2rem; }
+}
+
+@media (max-width: 480px) {
+    .hero h1 { font-size: 2.8rem; }
+    .hero .highlight { font-size: 3.2rem; }
+    .wishes h2 { font-size: 2.5rem; }
+    .glass-card.small h3 { font-size: 2rem; }
+    .glow-btn { padding: 1rem 2rem; font-size: 1.2rem; }
+    .final h1 { font-size: 3.5rem; }
+}
